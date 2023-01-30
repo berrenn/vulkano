@@ -4012,6 +4012,26 @@ pub struct CopyBufferInfo {
 }
 
 impl CopyBufferInfo {
+    /// Like buffers but takes in offset data
+    /// src_offset and dst_offsets are in bytes so remember to multiply by the element size
+    #[inline]
+    pub fn new(src_buffer: Subbuffer<impl ?Sized>, dst_buffer: Subbuffer<impl ?Sized>, src_offset: DeviceSize, dst_offset: DeviceSize,) -> Self {
+        assert!(src_buffer.size() > src_offset, "Source buffer size ({}) is too small for offset ({}).", src_buffer.size(), src_offset);
+        assert!(dst_buffer.size() > dst_offset, "Destination buffer size ({}) is too small for offset ({}).", dst_buffer.size(), dst_offset);
+        let region = BufferCopy {
+            src_offset,
+            dst_offset,
+            size: min(src_buffer.size() - src_offset, dst_buffer.size() - dst_offset),
+            ..Default::default()
+        };
+
+        Self {
+            src_buffer: src_buffer.into_bytes(),
+            dst_buffer: dst_buffer.into_bytes(),
+            regions: smallvec![region],
+            _ne: crate::NonExhaustive(()),
+        }
+    }
     /// Returns a `CopyBufferInfo` with the specified `src_buffer` and `dst_buffer`.
     #[inline]
     pub fn buffers(src_buffer: Subbuffer<impl ?Sized>, dst_buffer: Subbuffer<impl ?Sized>) -> Self {

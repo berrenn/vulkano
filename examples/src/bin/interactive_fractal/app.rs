@@ -162,9 +162,9 @@ Usage:
     pub fn update_state_after_inputs(&mut self, renderer: &mut VulkanoWindowRenderer) {
         // Zoom in or out
         if self.input_state.scroll_delta > 0. {
-            self.scale /= 1.05;
+            self.scale /= 1.25;
         } else if self.input_state.scroll_delta < 0. {
-            self.scale *= 1.05;
+            self.scale *= 1.25;
         }
         // Move speed scaled by zoom level
         let move_speed = MOVE_SPEED * self.dt * self.scale.x;

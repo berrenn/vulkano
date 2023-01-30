@@ -58,11 +58,11 @@ impl Default for VulkanoConfig {
                 application_version: Version::V1_3,
                 enabled_extensions: InstanceExtensions {
                     #[cfg(target_os = "macos")]
-                    khr_portability_enumeration: true,
+                    khr_portability_enumeration: false,
                     ..InstanceExtensions::empty()
                 },
                 #[cfg(target_os = "macos")]
-                enumerate_portability: true,
+                enumerate_portability: false,
                 ..Default::default()
             },
             debug_create_info: None,
